@@ -41,10 +41,9 @@
             // btnFill
             // 
             this.btnFill.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnFill.Location = new System.Drawing.Point(22, 1040);
-            this.btnFill.Margin = new System.Windows.Forms.Padding(4);
+            this.btnFill.Location = new System.Drawing.Point(16, 834);
             this.btnFill.Name = "btnFill";
-            this.btnFill.Size = new System.Drawing.Size(220, 75);
+            this.btnFill.Size = new System.Drawing.Size(165, 60);
             this.btnFill.TabIndex = 0;
             this.btnFill.Text = "&Fill";
             this.btnFill.UseVisualStyleBackColor = true;
@@ -61,14 +60,15 @@
             this.dgFiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.cName,
             this.cDate});
-            this.dgFiles.Location = new System.Drawing.Point(22, 29);
-            this.dgFiles.Margin = new System.Windows.Forms.Padding(4);
+            this.dgFiles.Location = new System.Drawing.Point(16, 23);
+            this.dgFiles.MultiSelect = false;
             this.dgFiles.Name = "dgFiles";
             this.dgFiles.ReadOnly = true;
             this.dgFiles.RowHeadersVisible = false;
             this.dgFiles.RowHeadersWidth = 4;
             this.dgFiles.RowTemplate.Height = 33;
-            this.dgFiles.Size = new System.Drawing.Size(964, 992);
+            this.dgFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgFiles.Size = new System.Drawing.Size(723, 794);
             this.dgFiles.TabIndex = 1;
             // 
             // cName
@@ -93,20 +93,21 @@
             // 
             this.lblFillInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblFillInfo.AutoSize = true;
-            this.lblFillInfo.Location = new System.Drawing.Point(264, 1049);
-            this.lblFillInfo.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblFillInfo.Location = new System.Drawing.Point(198, 838);
+            this.lblFillInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblFillInfo.Name = "lblFillInfo";
-            this.lblFillInfo.Size = new System.Drawing.Size(0, 25);
+            this.lblFillInfo.Size = new System.Drawing.Size(0, 20);
             this.lblFillInfo.TabIndex = 2;
             // 
             // cbDisable
             // 
             this.cbDisable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cbDisable.AutoSize = true;
-            this.cbDisable.Location = new System.Drawing.Point(714, 1067);
+            this.cbDisable.Location = new System.Drawing.Point(535, 853);
+            this.cbDisable.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cbDisable.Name = "cbDisable";
             this.cbDisable.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.cbDisable.Size = new System.Drawing.Size(271, 29);
+            this.cbDisable.Size = new System.Drawing.Size(204, 24);
             this.cbDisable.TabIndex = 3;
             this.cbDisable.Text = "Disable During Updates";
             this.cbDisable.UseVisualStyleBackColor = true;
@@ -116,23 +117,22 @@
             // 
             this.lblResizeInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblResizeInfo.AutoSize = true;
-            this.lblResizeInfo.Location = new System.Drawing.Point(264, 1090);
-            this.lblResizeInfo.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.lblResizeInfo.Location = new System.Drawing.Point(198, 869);
+            this.lblResizeInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblResizeInfo.Name = "lblResizeInfo";
-            this.lblResizeInfo.Size = new System.Drawing.Size(0, 25);
+            this.lblResizeInfo.Size = new System.Drawing.Size(0, 20);
             this.lblResizeInfo.TabIndex = 4;
             // 
             // frmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1008, 1137);
-            this.Controls.Add(this.cbDisable);
-            this.Controls.Add(this.lblFillInfo);
-            this.Controls.Add(this.lblResizeInfo);
+            this.ClientSize = new System.Drawing.Size(756, 910);
             this.Controls.Add(this.dgFiles);
             this.Controls.Add(this.btnFill);
-            this.Margin = new System.Windows.Forms.Padding(4);
+            this.Controls.Add(this.lblFillInfo);
+            this.Controls.Add(this.lblResizeInfo);
+            this.Controls.Add(this.cbDisable);
             this.Name = "frmMain";
             this.Text = "DataGridView Test";
             ((System.ComponentModel.ISupportInitialize)(this.dgFiles)).EndInit();

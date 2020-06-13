@@ -35,15 +35,8 @@ namespace WFTest
 
         private void ResizeColumns()
         {
-            bool reenable = false;
-
             // For timing
             DateTime start = DateTime.Now;
-
-            if (dgFiles.Enabled == true && _disabledDuringUpdates == true)
-            {
-                dgFiles.Enabled = false;
-            }
 
             dgFiles.AutoResizeColumn(0, DataGridViewAutoSizeColumnMode.AllCells);
             dgFiles.AutoResizeColumn(1, DataGridViewAutoSizeColumnMode.AllCells);
@@ -52,11 +45,6 @@ namespace WFTest
             var current = dgFiles.Columns[0].Width;
             int offset = (dgFiles.ScrollBars & ScrollBars.Vertical) != ScrollBars.None ? System.Windows.Forms.SystemInformation.VerticalScrollBarWidth : 0;
             dgFiles.Columns[0].Width = Math.Max(current, dgFiles.Width - (SystemInformation.SizingBorderWidth * 2) - dgFiles.Columns[1].Width - (dgFiles.Columns[0].DividerWidth == 0 ? 1 : dgFiles.Columns[0].Width) - offset);
-
-            if (reenable == true)
-            {
-                dgFiles.Enabled = true;
-            }
 
             // For timing
             TimeSpan elapsed = DateTime.Now - start;
@@ -85,18 +73,23 @@ namespace WFTest
             // Add 1500 items to the data grid view
             for (int i = 0; i < 1500; i++)
             {
-                // Randomly set bolded font on about 30% of the rows
+                // Randomly set bolded font on about 40% of the rows
                 DataGridViewRow row = new DataGridViewRow();
-                var rn = _RNG.Next(1, 10);
-                if (rn >= 7)
+                if (_RNG.Next(1, 10) >= 7)
                 {
                     row.DefaultCellStyle = new DataGridViewCellStyle() { Font = new Font(DefaultFont, FontStyle.Bold) };
                 }
                 row.Cells.Add(new DataGridViewTextBoxCell());
                 row.Cells.Add(new DataGridViewTextBoxCell());
-                row.Cells[0].Value = $"Name {i:0000} - {rn}";
-                row.Cells[1].Value = $"{DateTime.Now:G} - {rn}";
+                row.Cells[0].Value = $"C:\\Folder\\Subfolder\\Long_File_Name_{_RNG.Next(1, int.MaxValue)}.pdf";
+                row.Cells[1].Value = $"{DateTime.Now:G} - {_RNG.Next(1, 1000):0000}";
                 dgFiles.Rows.Add(row);
+            }
+
+            // Force a sort, if present
+            if (dgFiles.SortedColumn != null)
+            {
+                dgFiles.Sort(dgFiles.SortedColumn, dgFiles.SortOrder == SortOrder.Ascending ? ListSortDirection.Ascending : ListSortDirection.Descending);
             }
 
             // Force a resize
