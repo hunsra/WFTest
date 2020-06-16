@@ -12,8 +12,12 @@ namespace WFTest
 {
     public partial class frmMain : Form
     {
+        private bool _useDataSource = false;
         private bool _disabledDuringUpdates = false;
+        private bool _boldingInLine = false;
+        private bool _disableBolding = false;
         private Random _RNG = new Random((int)DateTime.Now.Ticks);
+        private BindingList<GridData> _gridData = new BindingList<GridData>();
 
         public frmMain()
         {
@@ -22,7 +26,9 @@ namespace WFTest
             // Set controls to default state
             dgFiles.Columns[0].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             dgFiles.Columns[1].AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            cbDisable.Checked = _useDataSource;
             cbDisable.Checked = _disabledDuringUpdates;
+            cbDisableBolding.Checked = _disableBolding;
             
             // Add a handler for important events
             Resize += FrmMain_Resize;
@@ -53,6 +59,14 @@ namespace WFTest
 
         private void btnFill_Click(object sender, EventArgs e)
         {
+            var styleBold = new DataGridViewCellStyle { Font = new Font(dgFiles.Font, FontStyle.Bold) };
+            var styleRegular = new DataGridViewCellStyle { Font = new Font(dgFiles.Font, FontStyle.Regular) };
+
+            cbDataSource.Enabled = false;
+            cbDisable.Enabled = false;
+            cbBoldingInLine.Enabled = false;
+            cbDisableBolding.Enabled = false;
+
             Cursor.Current = Cursors.WaitCursor;
 
             // This is to maximize the work the datagridview needs to do to load the data
@@ -69,21 +83,75 @@ namespace WFTest
                 // Disable the entire control - this prevents visual updates
                 dgFiles.Enabled = false;
             }
-            
-            // Add 1500 items to the data grid view
-            for (int i = 0; i < 1500; i++)
+
+            if (_useDataSource == false)
             {
-                // Randomly set bolded font on about 40% of the rows
-                DataGridViewRow row = new DataGridViewRow();
-                if (_RNG.Next(1, 10) >= 7)
+                dgFiles.DataSource = null;
+                dgFiles.Columns.Clear();
+                dgFiles.Columns.Add("cName", "Name");
+                dgFiles.Columns.Add("cDate", "Date");
+
+                // Add 1500 items to the data grid view
+                for (int i = 0; i < 1500; i++)
                 {
-                    row.DefaultCellStyle = new DataGridViewCellStyle() { Font = new Font(DefaultFont, FontStyle.Bold) };
+                    DataGridViewRow row = new DataGridViewRow();
+
+                    // Randomly set bolded font on about 40% of the rows, unless diabled
+                    if (_disableBolding == false && _boldingInLine == true)
+                    {
+                        if (_RNG.Next(1, 10) >= 7)
+                        {
+                            row.DefaultCellStyle = new DataGridViewCellStyle(styleBold);
+                        }
+                    }
+
+                    row.Cells.Add(new DataGridViewTextBoxCell());
+                    row.Cells.Add(new DataGridViewTextBoxCell());
+                    row.Cells[0].Value = $"C:\\Folder\\Subfolder\\Long_File_Name_{_RNG.Next(1, int.MaxValue)}.pdf";
+                    row.Cells[1].Value = $"{DateTime.Now:G} - {_RNG.Next(1, 1000):0000}";
+
+                    dgFiles.Rows.Add(row);
                 }
-                row.Cells.Add(new DataGridViewTextBoxCell());
-                row.Cells.Add(new DataGridViewTextBoxCell());
-                row.Cells[0].Value = $"C:\\Folder\\Subfolder\\Long_File_Name_{_RNG.Next(1, int.MaxValue)}.pdf";
-                row.Cells[1].Value = $"{DateTime.Now:G} - {_RNG.Next(1, 1000):0000}";
-                dgFiles.Rows.Add(row);
+
+                if (_disableBolding == false && _boldingInLine == false)
+                {
+                    foreach (DataGridViewRow row in dgFiles.Rows)
+                    {
+                        row.DefaultCellStyle = _RNG.Next(1, 10) >= 7 ? styleBold : styleRegular;
+                    }
+                }
+            }
+            else
+            {
+                if (dgFiles.DataSource == null)
+                {
+                    dgFiles.Columns.Clear();
+                }
+
+                dgFiles.DataSource = _gridData;
+                _gridData.Clear();
+
+                for (int i = 0; i < 1500; i++)
+                {
+                    GridData data = new GridData() { Name = $"C:\\Folder\\Subfolder\\Long_File_Name_{_RNG.Next(1, int.MaxValue)}.pdf", Date = $"{DateTime.Now:G} - {_RNG.Next(1, 1000):0000}" };
+                    _gridData.Add(data);
+
+                    // Randomly set bolded font on about 40% of the rows, unless diabled
+                    if (_disableBolding == false && _boldingInLine == true)
+                    {
+                        dgFiles.Rows[dgFiles.Rows.Count - 1].DefaultCellStyle = _RNG.Next(1, 10) >= 7 ? styleBold : styleRegular;
+                    }
+                }
+
+
+                // Randomly set bolded font on about 40% of the rows, unless diabled
+                if (_disableBolding == false && _boldingInLine == false)
+                {
+                    foreach (DataGridViewRow row in dgFiles.Rows)
+                    {
+                        row.DefaultCellStyle = _RNG.Next(1, 10) >= 7 ? styleBold : styleRegular;
+                    }
+                }
             }
 
             // Force a sort, if present
@@ -105,12 +173,32 @@ namespace WFTest
             TimeSpan elapsed = DateTime.Now - start;
             lblFillInfo.Text = $"Fill time: {elapsed.TotalMilliseconds}ms";
 
+            cbDataSource.Enabled = true;
+            cbDisable.Enabled = true;
+            cbBoldingInLine.Enabled = true;
+            cbDisableBolding.Enabled = true;
+
             Cursor.Current = Cursors.Default;
         }
 
         private void cbDisable_CheckedChanged(object sender, EventArgs e)
         {
             _disabledDuringUpdates = cbDisable.Checked;
+        }
+
+        private void cbDisableBolding_CheckedChanged(object sender, EventArgs e)
+        {
+            _disableBolding = cbDisableBolding.Checked;
+        }
+
+        private void cbDataSource_CheckedChanged(object sender, EventArgs e)
+        {
+            _useDataSource = cbDataSource.Checked;
+        }
+
+        private void cbBoldingInLine_CheckedChanged(object sender, EventArgs e)
+        {
+            _boldingInLine = cbBoldingInLine.Checked;
         }
     }
 }
