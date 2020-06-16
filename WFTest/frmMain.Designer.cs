@@ -30,14 +30,13 @@
         {
             this.btnFill = new System.Windows.Forms.Button();
             this.dgFiles = new System.Windows.Forms.DataGridView();
-            this.cName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.cDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblFillInfo = new System.Windows.Forms.Label();
             this.cbDisable = new System.Windows.Forms.CheckBox();
             this.lblResizeInfo = new System.Windows.Forms.Label();
             this.cbDisableBolding = new System.Windows.Forms.CheckBox();
             this.cbDataSource = new System.Windows.Forms.CheckBox();
             this.cbBoldingInLine = new System.Windows.Forms.CheckBox();
+            this.cbVirtual = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgFiles)).BeginInit();
             this.SuspendLayout();
             // 
@@ -56,43 +55,24 @@
             // 
             this.dgFiles.AllowUserToAddRows = false;
             this.dgFiles.AllowUserToDeleteRows = false;
+            this.dgFiles.AllowUserToResizeRows = false;
             this.dgFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.dgFiles.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgFiles.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.cName,
-            this.cDate});
+            this.dgFiles.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgFiles.Location = new System.Drawing.Point(16, 23);
             this.dgFiles.MultiSelect = false;
             this.dgFiles.Name = "dgFiles";
             this.dgFiles.ReadOnly = true;
             this.dgFiles.RowHeadersVisible = false;
             this.dgFiles.RowHeadersWidth = 4;
+            this.dgFiles.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
             this.dgFiles.RowTemplate.Height = 33;
+            this.dgFiles.RowTemplate.ReadOnly = true;
             this.dgFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgFiles.Size = new System.Drawing.Size(723, 737);
+            this.dgFiles.Size = new System.Drawing.Size(723, 696);
             this.dgFiles.TabIndex = 1;
-            // 
-            // cName
-            // 
-            this.cName.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.cName.DataPropertyName = "Name";
-            this.cName.HeaderText = "Name";
-            this.cName.MinimumWidth = 10;
-            this.cName.Name = "cName";
-            this.cName.ReadOnly = true;
-            this.cName.Width = 859;
-            // 
-            // cDate
-            // 
-            this.cDate.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
-            this.cDate.DataPropertyName = "Date";
-            this.cDate.HeaderText = "Date";
-            this.cDate.MinimumWidth = 10;
-            this.cDate.Name = "cDate";
-            this.cDate.ReadOnly = true;
-            this.cDate.Width = 102;
             // 
             // lblFillInfo
             // 
@@ -108,7 +88,7 @@
             // 
             this.cbDisable.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cbDisable.AutoSize = true;
-            this.cbDisable.Location = new System.Drawing.Point(535, 808);
+            this.cbDisable.Location = new System.Drawing.Point(535, 809);
             this.cbDisable.Margin = new System.Windows.Forms.Padding(2);
             this.cbDisable.Name = "cbDisable";
             this.cbDisable.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -132,7 +112,7 @@
             // 
             this.cbDisableBolding.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cbDisableBolding.AutoSize = true;
-            this.cbDisableBolding.Location = new System.Drawing.Point(594, 870);
+            this.cbDisableBolding.Location = new System.Drawing.Point(594, 869);
             this.cbDisableBolding.Name = "cbDisableBolding";
             this.cbDisableBolding.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.cbDisableBolding.Size = new System.Drawing.Size(145, 24);
@@ -145,7 +125,7 @@
             // 
             this.cbDataSource.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cbDataSource.AutoSize = true;
-            this.cbDataSource.Location = new System.Drawing.Point(585, 779);
+            this.cbDataSource.Location = new System.Drawing.Point(585, 749);
             this.cbDataSource.Name = "cbDataSource";
             this.cbDataSource.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.cbDataSource.Size = new System.Drawing.Size(154, 24);
@@ -158,7 +138,7 @@
             // 
             this.cbBoldingInLine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cbBoldingInLine.AutoSize = true;
-            this.cbBoldingInLine.Location = new System.Drawing.Point(598, 840);
+            this.cbBoldingInLine.Location = new System.Drawing.Point(598, 839);
             this.cbBoldingInLine.Name = "cbBoldingInLine";
             this.cbBoldingInLine.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.cbBoldingInLine.Size = new System.Drawing.Size(141, 24);
@@ -166,6 +146,19 @@
             this.cbBoldingInLine.Text = "Bolding In-Line";
             this.cbBoldingInLine.UseVisualStyleBackColor = true;
             this.cbBoldingInLine.CheckedChanged += new System.EventHandler(this.cbBoldingInLine_CheckedChanged);
+            // 
+            // cbVirtual
+            // 
+            this.cbVirtual.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbVirtual.AutoSize = true;
+            this.cbVirtual.Location = new System.Drawing.Point(582, 779);
+            this.cbVirtual.Name = "cbVirtual";
+            this.cbVirtual.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.cbVirtual.Size = new System.Drawing.Size(157, 24);
+            this.cbVirtual.TabIndex = 8;
+            this.cbVirtual.Text = "Use Virtual Mode";
+            this.cbVirtual.UseVisualStyleBackColor = true;
+            this.cbVirtual.CheckedChanged += new System.EventHandler(this.cbVirtual_CheckedChanged);
             // 
             // frmMain
             // 
@@ -177,6 +170,7 @@
             this.Controls.Add(this.lblFillInfo);
             this.Controls.Add(this.lblResizeInfo);
             this.Controls.Add(this.cbDataSource);
+            this.Controls.Add(this.cbVirtual);
             this.Controls.Add(this.cbDisable);
             this.Controls.Add(this.cbBoldingInLine);
             this.Controls.Add(this.cbDisableBolding);
@@ -197,8 +191,7 @@
         private System.Windows.Forms.Label lblResizeInfo;
         private System.Windows.Forms.CheckBox cbDisableBolding;
         private System.Windows.Forms.CheckBox cbDataSource;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn cDate;
         private System.Windows.Forms.CheckBox cbBoldingInLine;
+        private System.Windows.Forms.CheckBox cbVirtual;
     }
 }
