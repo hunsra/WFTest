@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -139,8 +140,8 @@ namespace WFTest
                 }
                 else
                 {
-                    dgFiles.VirtualMode = true;
                     dgFiles.DataSource = null;
+                    dgFiles.VirtualMode = true;
                     dgFiles.Columns.Clear();
                     dgFiles.Columns.Add("cName", "Name");
                     dgFiles.Columns.Add("cDate", "Date");
@@ -184,7 +185,10 @@ namespace WFTest
             }
 
             // Force a resize
-            ResizeColumns();
+            this.BeginInvoke(new Action(() =>
+            {
+                ResizeColumns();
+            }));
 
             if (_disabledDuringUpdates == true)
             {
