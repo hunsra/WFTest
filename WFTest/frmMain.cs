@@ -114,7 +114,7 @@ namespace WFTest
                     DateTime threadStart = DateTime.Now;
 
                     // Add 1500 items to the data grid view
-                    for (int i = 0; i < 1500; i++)
+                    for (int i = 0; i < 5000; i++)
                     {
                         DataGridViewRow row = new DataGridViewRow();
 
@@ -176,7 +176,7 @@ namespace WFTest
                     // For timing
                     DateTime threadStart = DateTime.Now;
 
-                    for (int i = 0; i < 1500; i++)
+                    for (int i = 0; i < 5000; i++)
                     {
                         GridData data = new GridData() { Name = $"C:\\Folder\\Subfolder\\Long_File_Name_{_RNG.Next(1, int.MaxValue)}.pdf", Date = $"{DateTime.Now:G} - {_RNG.Next(1, 1000):0000}" };
                         _gridData.Add(data);
