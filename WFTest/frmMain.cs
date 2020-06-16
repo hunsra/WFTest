@@ -17,6 +17,7 @@ namespace WFTest
         private DataGridViewCellStyle _styleRegular;
         private bool _useDataSource = false;
         private bool _useVirtual = false;
+        private bool _virtualDelay = false;
         private bool _disabledDuringUpdates = false;
         private bool _boldingInLine = false;
         private bool _disableBolding = false;
@@ -30,15 +31,23 @@ namespace WFTest
             // Set controls to default state
             cbDataSource.Checked = _useDataSource;
             cbVirtual.Checked = _useVirtual;
+            cbDelay.Checked = _virtualDelay;
             cbDisable.Checked = _disabledDuringUpdates;
             cbBoldingInLine.Checked = _boldingInLine;
             cbDisableBolding.Checked = _disableBolding;
+            EnableControls(true);
 
             _styleBold = new DataGridViewCellStyle { Font = new Font(dgFiles.Font, FontStyle.Bold) };
             _styleRegular = new DataGridViewCellStyle { Font = new Font(dgFiles.Font, FontStyle.Regular) };
 
             // Add a handler for important events
             Resize += FrmMain_Resize;
+            dgFiles.Scroll += OnScroll;
+        }
+
+        private void OnScroll(object sender, ScrollEventArgs e)
+        {
+            ResizeColumns();
         }
 
         private void FrmMain_Resize(object sender, EventArgs e)
@@ -51,13 +60,16 @@ namespace WFTest
             // For timing
             DateTime start = DateTime.Now;
 
-            dgFiles.AutoResizeColumn(0, DataGridViewAutoSizeColumnMode.AllCells);
-            dgFiles.AutoResizeColumn(1, DataGridViewAutoSizeColumnMode.AllCells);
+            if (dgFiles.Columns.Count >= 2)
+            {
+                dgFiles.AutoResizeColumn(0, DataGridViewAutoSizeColumnMode.DisplayedCells);
+                dgFiles.AutoResizeColumn(1, DataGridViewAutoSizeColumnMode.DisplayedCells);
 
-            // Calculate the width of the first column - all remaining width or width of widest text, whichever is larger
-            var current = dgFiles.Columns[0].Width;
-            int offset = (dgFiles.ScrollBars & ScrollBars.Vertical) != ScrollBars.None ? System.Windows.Forms.SystemInformation.VerticalScrollBarWidth : 0;
-            dgFiles.Columns[0].Width = Math.Max(current, dgFiles.Width - (SystemInformation.SizingBorderWidth * 2) - dgFiles.Columns[1].Width - (dgFiles.Columns[0].DividerWidth == 0 ? 1 : dgFiles.Columns[0].Width) - offset);
+                // Calculate the width of the first column - all remaining width or width of widest text, whichever is larger
+                var current = dgFiles.Columns[0].Width;
+                int offset = (dgFiles.ScrollBars & ScrollBars.Vertical) != ScrollBars.None ? System.Windows.Forms.SystemInformation.VerticalScrollBarWidth : 0;
+                dgFiles.Columns[0].Width = Math.Max(current, dgFiles.Width - (SystemInformation.SizingBorderWidth * 2) - dgFiles.Columns[1].Width - (dgFiles.Columns[0].DividerWidth == 0 ? 1 : dgFiles.Columns[0].Width) - offset);
+            }
 
             // For timing
             TimeSpan elapsed = DateTime.Now - start;
@@ -73,11 +85,11 @@ namespace WFTest
 
             Cursor.Current = Cursors.WaitCursor;
 
-            // This is to maximize the work the datagridview needs to do to load the data
-            var gen = GC.GetGeneration(dgFiles);
-            dgFiles.Rows.Clear();
-            GC.Collect(gen, GCCollectionMode.Forced, true, true);
-            GC.WaitForFullGCComplete();
+            //// This is to maximize the work the datagridview needs to do to load the data
+            //var gen = GC.GetGeneration(dgFiles);
+            //dgFiles.Rows.Clear();
+            //GC.Collect(gen, GCCollectionMode.Forced, true);
+            //GC.WaitForFullGCComplete();
 
             // For timing
             DateTime start = DateTime.Now;
@@ -96,35 +108,44 @@ namespace WFTest
                 dgFiles.Columns.Add("cName", "Name");
                 dgFiles.Columns.Add("cDate", "Date");
 
-                // Add 1500 items to the data grid view
-                for (int i = 0; i < 1500; i++)
+                this.BeginInvoke(new Action(() => 
                 {
-                    DataGridViewRow row = new DataGridViewRow();
+                    // For timing
+                    DateTime threadStart = DateTime.Now;
 
-                    // Randomly set bolded font on about 40% of the rows, unless diabled
-                    if (_disableBolding == false && _boldingInLine == true)
+                    // Add 1500 items to the data grid view
+                    for (int i = 0; i < 1500; i++)
                     {
-                        if (_RNG.Next(1, 10) >= 7)
+                        DataGridViewRow row = new DataGridViewRow();
+
+                        // Randomly set bolded font on about 40% of the rows, unless diabled
+                        if (_disableBolding == false && _boldingInLine == true)
                         {
-                            row.DefaultCellStyle = new DataGridViewCellStyle(_styleBold);
+                            if (_RNG.Next(1, 10) >= 7)
+                            {
+                                row.DefaultCellStyle = new DataGridViewCellStyle(_styleBold);
+                            }
+                        }
+
+                        row.Cells.Add(new DataGridViewTextBoxCell());
+                        row.Cells.Add(new DataGridViewTextBoxCell());
+                        row.Cells[0].Value = $"C:\\Folder\\Subfolder\\Long_File_Name_{_RNG.Next(1, int.MaxValue)}.pdf";
+                        row.Cells[1].Value = $"{DateTime.Now:G} - {_RNG.Next(1, 1000):0000}";
+
+                        dgFiles.Rows.Add(row);
+                    }
+
+                    if (_disableBolding == false && _boldingInLine == false)
+                    {
+                        foreach (DataGridViewRow row in dgFiles.Rows)
+                        {
+                            row.DefaultCellStyle = _RNG.Next(1, 10) >= 7 ? _styleBold : _styleRegular;
                         }
                     }
 
-                    row.Cells.Add(new DataGridViewTextBoxCell());
-                    row.Cells.Add(new DataGridViewTextBoxCell());
-                    row.Cells[0].Value = $"C:\\Folder\\Subfolder\\Long_File_Name_{_RNG.Next(1, int.MaxValue)}.pdf";
-                    row.Cells[1].Value = $"{DateTime.Now:G} - {_RNG.Next(1, 1000):0000}";
-
-                    dgFiles.Rows.Add(row);
-                }
-
-                if (_disableBolding == false && _boldingInLine == false)
-                {
-                    foreach (DataGridViewRow row in dgFiles.Rows)
-                    {
-                        row.DefaultCellStyle = _RNG.Next(1, 10) >= 7 ? _styleBold : _styleRegular;
-                    }
-                }
+                    TimeSpan threadElapsed = DateTime.Now - threadStart;
+                    lblThread.Text = $"Thread elapsed: {threadElapsed.TotalMilliseconds}ms";
+                }));
             }
             else
             {
@@ -150,32 +171,41 @@ namespace WFTest
 
                 _gridData.Clear();
 
-                for (int i = 0; i < 1500; i++)
+                this.BeginInvoke(new Action(() =>
                 {
-                    GridData data = new GridData() { Name = $"C:\\Folder\\Subfolder\\Long_File_Name_{_RNG.Next(1, int.MaxValue)}.pdf", Date = $"{DateTime.Now:G} - {_RNG.Next(1, 1000):0000}" };
-                    _gridData.Add(data);
+                    // For timing
+                    DateTime threadStart = DateTime.Now;
+
+                    for (int i = 0; i < 1500; i++)
+                    {
+                        GridData data = new GridData() { Name = $"C:\\Folder\\Subfolder\\Long_File_Name_{_RNG.Next(1, int.MaxValue)}.pdf", Date = $"{DateTime.Now:G} - {_RNG.Next(1, 1000):0000}" };
+                        _gridData.Add(data);
+
+                        // Randomly set bolded font on about 40% of the rows, unless diabled
+                        if (_useVirtual == false && _disableBolding == false && _boldingInLine == true)
+                        {
+                            dgFiles.Rows[dgFiles.Rows.Count - 1].DefaultCellStyle = _RNG.Next(1, 10) >= 7 ? _styleBold : _styleRegular;
+                        }
+                    }
 
                     // Randomly set bolded font on about 40% of the rows, unless diabled
-                    if (_useVirtual == false && _disableBolding == false && _boldingInLine == true)
+                    if (_useVirtual == false && _disableBolding == false && _boldingInLine == false)
                     {
-                        dgFiles.Rows[dgFiles.Rows.Count - 1].DefaultCellStyle = _RNG.Next(1, 10) >= 7 ? _styleBold : _styleRegular;
+                        foreach (DataGridViewRow row in dgFiles.Rows)
+                        {
+                            row.DefaultCellStyle = _RNG.Next(1, 10) >= 7 ? _styleBold : _styleRegular;
+                        }
                     }
-                }
 
-
-                // Randomly set bolded font on about 40% of the rows, unless diabled
-                if (_useVirtual == false && _disableBolding == false && _boldingInLine == false)
-                {
-                    foreach (DataGridViewRow row in dgFiles.Rows)
+                    if (_useVirtual == true)
                     {
-                        row.DefaultCellStyle = _RNG.Next(1, 10) >= 7 ? _styleBold : _styleRegular;
+                        dgFiles.RowCount = _gridData.Count;
                     }
-                }
 
-                if (_useVirtual == true)
-                {
-                    dgFiles.RowCount = _gridData.Count;
-                }
+                    TimeSpan threadElapsed = DateTime.Now - threadStart;
+                    lblThread.Text = $"Thread time: {threadElapsed.TotalMilliseconds}ms";
+                }));
+
             }
 
             // Force a sort, if present
@@ -187,6 +217,7 @@ namespace WFTest
             // Force a resize
             this.BeginInvoke(new Action(() =>
             {
+                ResizeColumns();
                 ResizeColumns();
             }));
 
@@ -218,6 +249,11 @@ namespace WFTest
                         // If the rows doesn't already have a default cell style set (e.g. don't do thismoren than one per row)
                         if (dgFiles.Rows[e.RowIndex].HasDefaultCellStyle == false)
                         {
+                            if (_virtualDelay == true)
+                            {
+                                Thread.Sleep(10);
+                            }
+
                             // Set to bold randomly for about 40% of the rows
                             if (_RNG.Next(1, 10) >= 7)
                             {
@@ -242,6 +278,7 @@ namespace WFTest
             btnFill.Enabled = enable;
             cbDataSource.Enabled = enable && !_useVirtual;
             cbVirtual.Enabled = enable;
+            cbDelay.Enabled = enable && _useVirtual;
             cbDisable.Enabled = enable;
             cbBoldingInLine.Enabled = enable && !_disableBolding;
             cbDisableBolding.Enabled = enable;
@@ -272,6 +309,11 @@ namespace WFTest
         {
             _disableBolding = cbDisableBolding.Checked;
             EnableControls(true);
+        }
+
+        private void cbDelay_CheckedChanged(object sender, EventArgs e)
+        {
+            _virtualDelay = cbVirtual.Checked;
         }
     }
 }

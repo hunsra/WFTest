@@ -37,6 +37,8 @@
             this.cbDataSource = new System.Windows.Forms.CheckBox();
             this.cbBoldingInLine = new System.Windows.Forms.CheckBox();
             this.cbVirtual = new System.Windows.Forms.CheckBox();
+            this.lblThread = new System.Windows.Forms.Label();
+            this.cbDelay = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgFiles)).BeginInit();
             this.SuspendLayout();
             // 
@@ -71,14 +73,14 @@
             this.dgFiles.RowTemplate.Height = 33;
             this.dgFiles.RowTemplate.ReadOnly = true;
             this.dgFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgFiles.Size = new System.Drawing.Size(723, 696);
+            this.dgFiles.Size = new System.Drawing.Size(723, 663);
             this.dgFiles.TabIndex = 1;
             // 
             // lblFillInfo
             // 
             this.lblFillInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblFillInfo.AutoSize = true;
-            this.lblFillInfo.Location = new System.Drawing.Point(198, 838);
+            this.lblFillInfo.Location = new System.Drawing.Point(198, 797);
             this.lblFillInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lblFillInfo.Name = "lblFillInfo";
             this.lblFillInfo.Size = new System.Drawing.Size(0, 20);
@@ -125,7 +127,7 @@
             // 
             this.cbDataSource.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cbDataSource.AutoSize = true;
-            this.cbDataSource.Location = new System.Drawing.Point(585, 749);
+            this.cbDataSource.Location = new System.Drawing.Point(585, 722);
             this.cbDataSource.Name = "cbDataSource";
             this.cbDataSource.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.cbDataSource.Size = new System.Drawing.Size(154, 24);
@@ -151,7 +153,7 @@
             // 
             this.cbVirtual.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.cbVirtual.AutoSize = true;
-            this.cbVirtual.Location = new System.Drawing.Point(582, 779);
+            this.cbVirtual.Location = new System.Drawing.Point(582, 752);
             this.cbVirtual.Name = "cbVirtual";
             this.cbVirtual.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.cbVirtual.Size = new System.Drawing.Size(157, 24);
@@ -159,6 +161,28 @@
             this.cbVirtual.Text = "Use Virtual Mode";
             this.cbVirtual.UseVisualStyleBackColor = true;
             this.cbVirtual.CheckedChanged += new System.EventHandler(this.cbVirtual_CheckedChanged);
+            // 
+            // lblThread
+            // 
+            this.lblThread.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lblThread.AutoSize = true;
+            this.lblThread.Location = new System.Drawing.Point(198, 833);
+            this.lblThread.Name = "lblThread";
+            this.lblThread.Size = new System.Drawing.Size(0, 20);
+            this.lblThread.TabIndex = 9;
+            // 
+            // cbDelay
+            // 
+            this.cbDelay.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbDelay.AutoSize = true;
+            this.cbDelay.Location = new System.Drawing.Point(546, 780);
+            this.cbDelay.Name = "cbDelay";
+            this.cbDelay.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.cbDelay.Size = new System.Drawing.Size(193, 24);
+            this.cbDelay.TabIndex = 10;
+            this.cbDelay.Text = "Add virtual 10ms delay";
+            this.cbDelay.UseVisualStyleBackColor = true;
+            this.cbDelay.CheckedChanged += new System.EventHandler(this.cbDelay_CheckedChanged);
             // 
             // frmMain
             // 
@@ -168,9 +192,11 @@
             this.Controls.Add(this.dgFiles);
             this.Controls.Add(this.btnFill);
             this.Controls.Add(this.lblFillInfo);
+            this.Controls.Add(this.lblThread);
             this.Controls.Add(this.lblResizeInfo);
             this.Controls.Add(this.cbDataSource);
             this.Controls.Add(this.cbVirtual);
+            this.Controls.Add(this.cbDelay);
             this.Controls.Add(this.cbDisable);
             this.Controls.Add(this.cbBoldingInLine);
             this.Controls.Add(this.cbDisableBolding);
@@ -193,5 +219,7 @@
         private System.Windows.Forms.CheckBox cbDataSource;
         private System.Windows.Forms.CheckBox cbBoldingInLine;
         private System.Windows.Forms.CheckBox cbVirtual;
+        private System.Windows.Forms.Label lblThread;
+        private System.Windows.Forms.CheckBox cbDelay;
     }
 }
